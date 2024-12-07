@@ -109,14 +109,3 @@ char	*get_next_line(int fd)
 	return (add_str(newline));
 }
 
-int	main()
-{
-	int		fd;
-	char	*s;
-
-	fd = open("file1.txt", O_RDONLY | O_CREAT, 0666);
-	s = get_next_line(fd);
-	printf("%s", s);
-	free(s);
-	close(fd);
-}

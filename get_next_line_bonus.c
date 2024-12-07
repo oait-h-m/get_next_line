@@ -113,29 +113,3 @@ char	*get_next_line(int fd)
 	return (add_str(newline));
 }
 
-int main()
-{
-	int fd1, fd2 ,fd3;
-	fd1 = open("file1", O_RDONLY);
-	char *s1 = get_next_line(fd1);
-	printf("%s", s1);
-	free(s1);
-	fd2 = open("file2", O_RDONLY);
-	s1 = get_next_line(fd2);
-	printf("%s", s1);
-	free(s1);
-	fd3 = open("file3", O_RDONLY);
-	s1 = get_next_line(fd3);
-	printf("%s", s1);
-	free(s1);
-	s1 = get_next_line(fd1);
-	printf("%s", s1);
-	free(s1);
-	s1 = get_next_line(fd2);
-	printf("%s", s1);
-	free(s1);
-	s1 = get_next_line(fd3);
-	printf("%s", s1);
-	free(s1);
-
-}
