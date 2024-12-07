@@ -72,21 +72,18 @@ static char	*read_buff(int fd, char *buffer, char *line)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)
-		{
-			free(line);
-			return (NULL);
-		}
+			break;
 		buffer[bytes_read] = '\0';
 		new_line = ft_strjoin(line, buffer);
 		free(line);
 		line = new_line;
 	}
-	return (line);
+	return (new_line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*temp = NULL;
+	static char	*temp;
 	char		*line;
 	char		*buffer;
 	char		*newline;
@@ -112,21 +109,14 @@ char	*get_next_line(int fd)
 	return (add_str(newline));
 }
 
-int	main(void)
+int	main()
 {
 	int		fd;
 	char	*s;
 
-	fd = open("ff.txt", O_RDONLY | O_CREAT, 0666);
-	while ((s = get_next_line(fd)))
-	{
-		printf("%s", s);
-		free(s);
-		s = NULL;
-	}
+	fd = open("file1.txt", O_RDONLY | O_CREAT, 0666);
 	s = get_next_line(fd);
-	printf("%s\n", s);
+	printf("%s", s);
 	free(s);
 	close(fd);
-	return (0);
 }
