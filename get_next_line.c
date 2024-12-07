@@ -6,7 +6,7 @@
 /*   By: oait-h-m <oait-h-m@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 02:49:46 by oait-h-m          #+#    #+#             */
-/*   Updated: 2024/12/04 02:54:40 by oait-h-m         ###   ########.fr       */
+/*   Updated: 2024/12/07 17:45:23 by oait-h-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,17 @@ static char	*return_after_newline(char *s)
 	return (ret);
 }
 
-static char	*freed(char *buff, char *temp)
+static char	*freed(char **buff, char **temp)
 {
-	if (buff)
+	if (*buff)
 	{
-		free(buff);
-		buff = NULL;
+		free(*buff);
+		*buff = NULL;
 	}
-	if (temp)
+	if (*temp)
 	{
-		free(temp);
-		temp = NULL;
+		free(*temp);
+		*temp = NULL;
 	}
 	return (NULL);
 }
@@ -95,7 +95,7 @@ char	*get_next_line(int fd)
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer || BUFFER_SIZE == 0 || fd < 0)
-		return (freed(temp, buffer));
+		return (freed(&temp, &buffer));
 	line = ft_strdup("");
 	newline = line;
 	if (temp)
@@ -108,20 +108,8 @@ char	*get_next_line(int fd)
 	}
 	newline = read_buff(fd, buffer, newline);
 	if (!newline)
-		return (freed(buffer, temp));
+		return (freed(&buffer, &temp));
 	free(buffer);
 	temp = return_after_newline(newline);
 	return (add_str(newline));
-}
-
-int	main()
-{
-	int		fd;
-	char	*s;
-
-	fd = open("file1.txt", O_RDONLY | O_CREAT, 0666);
-	s = get_next_line(-3);
-	printf("%s", s);
-	free(s);
-	close(fd);
 }
