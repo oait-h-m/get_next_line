@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
 static char	*add_str(char *s)
 {
 	int	i;
@@ -87,24 +88,54 @@ static char *read_buff(int fd, char *buffer, char *line)
 char	*get_next_line(int fd)
 {
 	static char	*temp[1024];
-	char		*line = NULL;
+	char		*line;
 	char		*buffer;
+	char		*newline;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer || BUFFER_SIZE == 0)
-		return (freed(buffer, temp[fd]));
+		return (freed(temp[fd], NULL));
 	line = ft_strdup("");
+	newline = line;
 	if (temp[fd])
 	{
-		line = ft_strjoin(line, temp[fd]);
+		newline = ft_strjoin(line, temp[fd]);
 		free(temp[fd]);
+		free(line);
+		line = NULL;
 		temp[fd] = NULL;
 	}
-	line = read_buff(fd, buffer, line);
-	if (!line)
-		return freed(buffer, temp[fd]);
+	newline = read_buff(fd, buffer, newline);
+	if (!newline)
+		return (freed(buffer, temp[fd]));
 	free(buffer);
-	temp[fd] = return_after_newline(line);
-	return (add_str(line));
+	temp[fd] = return_after_newline(newline);
+	return (add_str(newline));
 }
 
+int main()
+{
+	int fd1, fd2 ,fd3;
+	fd1 = open("file1", O_RDONLY);
+	char *s1 = get_next_line(fd1);
+	printf("%s", s1);
+	free(s1);
+	fd2 = open("file2", O_RDONLY);
+	s1 = get_next_line(fd2);
+	printf("%s", s1);
+	free(s1);
+	fd3 = open("file3", O_RDONLY);
+	s1 = get_next_line(fd3);
+	printf("%s", s1);
+	free(s1);
+	s1 = get_next_line(fd1);
+	printf("%s", s1);
+	free(s1);
+	s1 = get_next_line(fd2);
+	printf("%s", s1);
+	free(s1);
+	s1 = get_next_line(fd3);
+	printf("%s", s1);
+	free(s1);
+
+}

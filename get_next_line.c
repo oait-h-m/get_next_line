@@ -47,7 +47,7 @@ static char	*return_after_newline(char *s)
 	return (ret);
 }
 
-static char	*freed(char *buff, char	*temp)
+static char	*freed(char *buff, char *temp)
 {
 	if (buff)
 	{
@@ -59,14 +59,15 @@ static char	*freed(char *buff, char	*temp)
 		free(temp);
 		temp = NULL;
 	}
-	return NULL;
+	return (NULL);
 }
 
-static char *read_buff(int fd, char *buffer, char *line)
+static char	*read_buff(int fd, char *buffer, char *line)
 {
-	int	bytes_read;
-	char	*new_line = NULL;
+	int		bytes_read;
+	char	*new_line;
 
+	new_line = NULL;
 	while (!ft_strchr(line, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -80,29 +81,52 @@ static char *read_buff(int fd, char *buffer, char *line)
 		free(line);
 		line = new_line;
 	}
-	return line;
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*temp = NULL;
-	char		*line = NULL;
+	char		*line;
 	char		*buffer;
+	char		*newline;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer || BUFFER_SIZE == 0)
-		return (freed(buffer, temp));
+		return (freed(temp, NULL));
 	line = ft_strdup("");
+	newline = line;
 	if (temp)
 	{
-		line = ft_strjoin(line, temp);
+		newline = ft_strjoin(line, temp);
 		free(temp);
+		free(line);
+		line = NULL;
 		temp = NULL;
 	}
-	line = read_buff(fd, buffer, line);
-	if (!line)
-		return freed(buffer, temp);
+	newline = read_buff(fd, buffer, newline);
+	if (!newline)
+		return (freed(buffer, temp));
 	free(buffer);
-	temp = return_after_newline(line);
-	return (add_str(line));
+	temp = return_after_newline(newline);
+	return (add_str(newline));
+}
+
+int	main(void)
+{
+	int		fd;
+	char	*s;
+
+	fd = open("ff.txt", O_RDONLY | O_CREAT, 0666);
+	while ((s = get_next_line(fd)))
+	{
+		printf("%s", s);
+		free(s);
+		s = NULL;
+	}
+	s = get_next_line(fd);
+	printf("%s\n", s);
+	free(s);
+	close(fd);
+	return (0);
 }
