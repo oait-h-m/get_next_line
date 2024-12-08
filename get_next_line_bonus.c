@@ -47,17 +47,17 @@ static char	*return_after_newline(char *s)
 	return (ret);
 }
 
-static char	*freed(char *buff, char	*temp)
+static char	*freed(char **buff, char	**temp)
 {
 	if (buff)
 	{
-		free(buff);
-		buff = NULL;
+		free(*buff);
+		*buff = NULL;
 	}
-	if (temp)
+	if (*temp)
 	{
-		free(temp);
-		temp = NULL;
+		free(*temp);
+		*temp = NULL;
 	}
 	return NULL;
 }
@@ -94,7 +94,7 @@ char	*get_next_line(int fd)
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer || BUFFER_SIZE == 0 || fd < 0)
-		return (freed(temp[fd], buffer));
+		return (freed(&temp[fd], &buffer));
 	line = ft_strdup("");
 	newline = line;
 	if (temp[fd])
@@ -107,18 +107,9 @@ char	*get_next_line(int fd)
 	}
 	newline = read_buff(fd, buffer, newline);
 	if (!newline)
-		return (freed(buffer, temp[fd]));
+		return (freed(&buffer, &temp[fd]));
 	free(buffer);
 	temp[fd] = return_after_newline(newline);
 	return (add_str(newline));
 }
 
-int main()
-{
-	int fd1;
-	fd1 = open("file1.txt", O_RDONLY);
-	char *s1 = get_next_line(fd1);
-	printf("%s", s1);
-	free(s1);
-	close(fd1);
-}

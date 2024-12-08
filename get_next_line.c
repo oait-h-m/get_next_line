@@ -47,7 +47,7 @@ static char	*return_after_newline(char *s)
 	return (ret);
 }
 
-static char	*freed(char **buff, char **temp)
+static char	*freed(char **buff, char	**temp)
 {
 	if (*buff)
 	{
@@ -59,29 +59,30 @@ static char	*freed(char **buff, char **temp)
 		free(*temp);
 		*temp = NULL;
 	}
-	return (NULL);
+	return NULL;
 }
 
-static char	*read_buff(int fd, char *buffer, char *line)
+static char *read_buff(int fd, char *buffer, char *line)
 {
-	int		bytes_read;
-	char	*new_line;
+	int	bytes_read;
+	char	*new_line = NULL;
 
-	new_line = NULL;
 	while (!ft_strchr(line, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)
 		{
+			if (bytes_read == 0 && *line)
+				return(line);
 			free(line);
-			break;
+			return (NULL);
 		}
 		buffer[bytes_read] = '\0';
 		new_line = ft_strjoin(line, buffer);
 		free(line);
 		line = new_line;
 	}
-	return (new_line);
+	return line;
 }
 
 char	*get_next_line(int fd)
@@ -91,9 +92,9 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	char		*newline;
 
-	buffer = malloc(sizeof(char) * (size_t)BUFFER_SIZE + 1);
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer || BUFFER_SIZE == 0 || fd < 0)
-		return (freed(&buffer, &temp));
+		return (freed(&temp, &buffer));
 	line = ft_strdup("");
 	newline = line;
 	if (temp)
@@ -111,3 +112,4 @@ char	*get_next_line(int fd)
 	temp = return_after_newline(newline);
 	return (add_str(newline));
 }
+
