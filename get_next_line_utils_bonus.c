@@ -15,7 +15,7 @@
 char	*get_next_check_temp(char **line, char **temp, int fd)
 {
 	char	*newline;
-	
+
 	newline = ft_strjoin(*line, temp[fd]);
 	free(temp[fd]);
 	free(*line);

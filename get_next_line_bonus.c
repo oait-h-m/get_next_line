@@ -109,4 +109,3 @@ char	*get_next_line(int fd)
 	temp[fd] = return_after_newline(newline);
 	return (add_str(newline));
 }
-
