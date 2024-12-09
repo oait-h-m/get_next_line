@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-static char	*add_str(char *s)
+static char	*first_to_newline(char *s)
 {
 	int	i;
 	int	is_true;
@@ -110,6 +110,7 @@ char	*get_next_line(int fd)
 	if (!newline)
 		return (freed(&buffer, &temp));
 	free(buffer);
+	buffer  = NULL;
 	temp = return_after_newline(newline);
-	return (add_str(newline));
+	return (first_to_newline(newline));
 }
