@@ -12,6 +12,18 @@
 
 #include "get_next_line_bonus.h"
 
+char	*get_next_check_temp(char **line, char **temp, int fd)
+{
+	char	*newline;
+	
+	newline = ft_strjoin(*line, temp[fd]);
+	free(temp[fd]);
+	free(*line);
+	*line = NULL;
+	temp[fd] = NULL;
+	return (newline);
+}
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;

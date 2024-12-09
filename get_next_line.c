@@ -6,7 +6,7 @@
 /*   By: oait-h-m <oait-h-m@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 02:49:46 by oait-h-m          #+#    #+#             */
-/*   Updated: 2024/12/07 17:45:23 by oait-h-m         ###   ########.fr       */
+/*   Updated: 2024/12/09 11:24:13 by oait-h-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*return_after_newline(char *s)
 	return (ret);
 }
 
-static char	*freed(char **buff, char	**temp)
+static char	*freed(char **buff, char **temp)
 {
 	if (*buff)
 	{
@@ -59,21 +59,22 @@ static char	*freed(char **buff, char	**temp)
 		free(*temp);
 		*temp = NULL;
 	}
-	return NULL;
+	return (NULL);
 }
 
-static char *read_buff(int fd, char *buffer, char *line)
+static char	*read_buff(int fd, char *buffer, char *line)
 {
-	int	bytes_read;
-	char	*new_line = NULL;
+	int		bytes_read;
+	char	*new_line;
 
+	new_line = NULL;
 	while (!ft_strchr(line, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)
 		{
 			if (bytes_read == 0 && *line)
-				return(line);
+				return (line);
 			free(line);
 			return (NULL);
 		}
@@ -82,7 +83,7 @@ static char *read_buff(int fd, char *buffer, char *line)
 		free(line);
 		line = new_line;
 	}
-	return line;
+	return (line);
 }
 
 char	*get_next_line(int fd)
@@ -92,7 +93,7 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	char		*newline;
 
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	buffer = malloc((size_t)BUFFER_SIZE + 1);
 	if (!buffer || BUFFER_SIZE == 0 || fd < 0)
 		return (freed(&temp, &buffer));
 	line = ft_strdup("");
@@ -112,4 +113,3 @@ char	*get_next_line(int fd)
 	temp = return_after_newline(newline);
 	return (add_str(newline));
 }
-

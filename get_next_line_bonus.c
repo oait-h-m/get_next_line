@@ -47,33 +47,34 @@ static char	*return_after_newline(char *s)
 	return (ret);
 }
 
-static char	*freed(char **buff, char	**temp)
+static char	*freed(char *buff, char *temp)
 {
 	if (buff)
 	{
-		free(*buff);
-		*buff = NULL;
+		free(buff);
+		buff = NULL;
 	}
-	if (*temp)
+	if (temp)
 	{
-		free(*temp);
-		*temp = NULL;
+		free(temp);
+		temp = NULL;
 	}
-	return NULL;
+	return (NULL);
 }
 
-static char *read_buff(int fd, char *buffer, char *line)
+static char	*read_buff(int fd, char *buffer, char *line)
 {
-	int	bytes_read;
-	char	*new_line = NULL;
+	int		bytes_read;
+	char	*new_line;
 
+	new_line = NULL;
 	while (!ft_strchr(line, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)
 		{
 			if (bytes_read == 0 && *line)
-				return(line);
+				return (line);
 			free(line);
 			return (NULL);
 		}
@@ -82,7 +83,7 @@ static char *read_buff(int fd, char *buffer, char *line)
 		free(line);
 		line = new_line;
 	}
-	return line;
+	return (line);
 }
 
 char	*get_next_line(int fd)
@@ -92,22 +93,18 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	char		*newline;
 
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer || BUFFER_SIZE == 0 || fd < 0)
-		return (freed(&temp[fd], &buffer));
+	if (fd < 0 || fd > 1024)
+		return (NULL);
+	buffer = malloc((size_t)BUFFER_SIZE + 1);
+	if (!buffer || BUFFER_SIZE <= 0)
+		return (freed(temp[fd], buffer));
 	line = ft_strdup("");
 	newline = line;
 	if (temp[fd])
-	{
-		newline = ft_strjoin(line, temp[fd]);
-		free(temp[fd]);
-		free(line);
-		line = NULL;
-		temp[fd] = NULL;
-	}
+		newline = get_next_check_temp(&line, temp, fd);
 	newline = read_buff(fd, buffer, newline);
 	if (!newline)
-		return (freed(&buffer, &temp[fd]));
+		return (freed(buffer, temp[fd]));
 	free(buffer);
 	temp[fd] = return_after_newline(newline);
 	return (add_str(newline));
