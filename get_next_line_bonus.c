@@ -68,6 +68,8 @@ static char	*read_buff(int fd, char *buffer, char *line)
 	char	*new_line;
 
 	new_line = NULL;
+	if (BUFFER_SIZE <= 0)
+		return (NULL);
 	while (!ft_strchr(line, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -93,10 +95,10 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	char		*newline;
 
-	if (fd < 0 || fd > 1024)
+	if (fd < 0 || fd >= 1024 || BUFFER_SIZE < 0)
 		return (NULL);
 	buffer = malloc((size_t)BUFFER_SIZE + 1);
-	if (!buffer || BUFFER_SIZE <= 0)
+	if (!buffer)
 		return (freed(temp[fd], buffer));
 	line = ft_strdup("");
 	newline = line;
