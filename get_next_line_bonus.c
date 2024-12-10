@@ -12,7 +12,7 @@
 
 #include "get_next_line_bonus.h"
 
-static char	*add_str(char *s)
+static char	*first_to_newline(char *s)
 {
 	int	i;
 	int	is_true;
@@ -109,5 +109,5 @@ char	*get_next_line(int fd)
 		return (freed(buffer, temp[fd]));
 	free(buffer);
 	temp[fd] = return_after_newline(newline);
-	return (add_str(newline));
+	return (first_to_newline(newline));
 }
