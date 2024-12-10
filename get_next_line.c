@@ -103,13 +103,7 @@ char	*get_next_line(int fd)
 	line = ft_strdup("");
 	newline = line;
 	if (temp)
-	{
-		newline = ft_strjoin(line, temp);
-		free(temp);
-		free(line);
-		line = NULL;
-		temp = NULL;
-	}
+		newline = get_next_check_temp(&line, &temp);
 	newline = read_buff(fd, buffer, newline);
 	if (!newline)
 		return (freed(&buffer, &temp));
