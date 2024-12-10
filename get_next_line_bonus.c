@@ -95,7 +95,7 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	char		*newline;
 
-	if (fd < 0 || fd >= 1024 || BUFFER_SIZE < 0)
+	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = malloc((size_t)BUFFER_SIZE + 1);
 	if (!buffer)
@@ -108,7 +108,6 @@ char	*get_next_line(int fd)
 	if (!newline)
 		return (freed(buffer, temp[fd]));
 	free(buffer);
-	buffer = NULL;
 	temp[fd] = return_after_newline(newline);
 	return (add_str(newline));
 }

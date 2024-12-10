@@ -68,7 +68,7 @@ static char	*read_buff(int fd, char *buffer, char *line)
 	char	*new_line;
 
 	new_line = NULL;
-	if (BUFFER_SIZE < 0)
+	if (BUFFER_SIZE <= 0)
 		return (NULL);
 	while (!ft_strchr(line, '\n'))
 	{
@@ -103,7 +103,13 @@ char	*get_next_line(int fd)
 	line = ft_strdup("");
 	newline = line;
 	if (temp)
-		newline = get_next_check_temp(&line, &temp);
+	{
+		newline = ft_strjoin(line, temp);
+		free(temp);
+		free(line);
+		line = NULL;
+		temp = NULL;
+	}
 	newline = read_buff(fd, buffer, newline);
 	if (!newline)
 		return (freed(&buffer, &temp));
