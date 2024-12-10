@@ -24,18 +24,17 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*get_next_check_temp(char **line, char **temp, int fd)
+char	*get_next_check_temp(char **line, char **temp)
 {
 	char	*newline;
 
 	newline = ft_strjoin(*line, *temp);
-	free(temp[fd]);
+	free(*temp);
 	free(*line);
 	*line = NULL;
-	temp[fd] = NULL;
+	temp = NULL;
 	return (newline);
 }
-
 
 char	*ft_strchr(const char *s, int c)
 {

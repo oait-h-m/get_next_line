@@ -108,6 +108,7 @@ char	*get_next_line(int fd)
 	if (!newline)
 		return (freed(buffer, temp[fd]));
 	free(buffer);
+	buffer = NULL;
 	temp[fd] = return_after_newline(newline);
 	return (add_str(newline));
 }
